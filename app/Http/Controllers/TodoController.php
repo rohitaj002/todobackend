@@ -38,7 +38,7 @@ class TodoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, Todo $todo)
     {
         return response()->json($todo);
     }
@@ -52,8 +52,17 @@ class TodoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $todo->update($request->all());
+        // $todo = Todo::findOrFail($id);
+        // $todo->update($request->all());
+        // return response()->json($todo);
 
+        $todo = Todo::findOrFail($id);
+
+        // Update the product
+        $todo->update([
+            'completed' => $request->completed,
+        ]);
+        // die($todo);
         return response()->json($todo);
     }
 
@@ -65,6 +74,7 @@ class TodoController extends Controller
      */
     public function destroy($id)
     {
+        $todo = Todo::findOrFail($id);
         $todo->delete();
 
         return response()->json(null, 204);
